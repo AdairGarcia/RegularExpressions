@@ -3,12 +3,13 @@
 import re
 import pandas as pd
 from collections import Counter
+import emoji
 
 
 def extract_string(df):
     hashtags = re.compile("#\w+")
     users = re.compile("@\w+")
-    #urls = re.compile("https?://(([a-zA-z]|[0-9]|[?]|#|=|-|&)+[.|/]?)+")
+    # urls = re.compile("(https?://)(([a-zA-z]|[0-9]|[?]|#|=|-|&)+[.|/]?)+")
     urls = re.compile("https?://[a-zA-z0-9./?=&#-]+")
 
     # Formatos de tiempo
@@ -17,8 +18,7 @@ def extract_string(df):
     hrs = re.compile("(\d+) ?(hrs|hr|hour|hours|horas|hora)")
 
     # Emoticones
-    # emoticones = re.compile("([:;=][)|vDdPpOo(Ss]+)|([|VvDOo(][;:=])")
-    emoticones = re.compile("(?:>?(?::|;)-?(?:\)|\(|D|p|P|0|\\|O|\|))|(?:(?:x|X)D)")
+    emoticones = re.compile("[^A-Za-z](>?[:;=xX][)|vDdPpOo(Ss]+)|([|VvDOo(][;:=xX]<?)$")
 
     todos_los_hashtags = []
     todos_los_usuarios = []
@@ -43,9 +43,11 @@ def extract_string(df):
             todas_los_tiempos.extend(hrs.findall(tweet))
         if emoticones.findall(tweet):
             todos_los_emoticones.extend(emoticones.findall(tweet))
-        # if emoji.emoji_list(tweet):
-        #     for objeto in emoji.emoji_list(tweet):
-        #         todos_los_emojis.append(objeto["emoji"])
+        if emoji.emoji_list(tweet):
+            for objeto in emoji.emoji_list(tweet):
+                todos_los_emojis.append(objeto["emoji"])
+
+    print(len(todos_los_emoticones))
 
     # cuenta la frecuencia de cada cadena
     conteo_hashtags = Counter(todos_los_hashtags)
