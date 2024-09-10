@@ -1,10 +1,6 @@
-# programa que extrae los hashtags de un texto en un archivo .csv
-
 import re
 import pandas as pd
 from collections import Counter
-import emoji
-
 
 def extract_string(df):
     hashtags = re.compile("#\w+")
@@ -19,6 +15,10 @@ def extract_string(df):
 
     # Emoticones
     emoticones = re.compile("[^A-Za-z](>?[:;=xX][)|vDdPpOo(Ss]+)|([|VvDOo(][;:=xX]<?)$")
+
+    # Emojis
+    # https://www.compart.com/en/unicode/block
+    emojis = re.compile("[\U00002600-\U000027BF\U0001F600-\U0001F64F\U0001F680-\U0001F6FF\U0001F900-\U0001F9FF]")
 
     todos_los_hashtags = []
     todos_los_usuarios = []
@@ -43,11 +43,12 @@ def extract_string(df):
             todas_los_tiempos.extend(hrs.findall(tweet))
         if emoticones.findall(tweet):
             todos_los_emoticones.extend(emoticones.findall(tweet))
-        if emoji.emoji_list(tweet):
-            for objeto in emoji.emoji_list(tweet):
-                todos_los_emojis.append(objeto["emoji"])
+        if emojis.findall(tweet):
+            todos_los_emojis.extend(emojis.findall(tweet))
+        # if emoji.emoji_list(tweet):
+        #     for objeto in emoji.emoji_list(tweet):
+        #         todos_los_emojis.append(objeto["emoji"])
 
-    print(len(todos_los_emoticones))
 
     # cuenta la frecuencia de cada cadena
     conteo_hashtags = Counter(todos_los_hashtags)
