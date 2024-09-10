@@ -3,7 +3,7 @@
 import re
 import pandas as pd
 from collections import Counter
-import emoji
+
 
 def extract_string(df):
     hashtags = re.compile("#\w+")
@@ -17,7 +17,8 @@ def extract_string(df):
     hrs = re.compile("(\d+) ?(hrs|hr|hour|hours|horas|hora)")
 
     # Emoticones
-    emoticones = re.compile("([:;=][)|vDdPpOo(Ss]+)|([|VvDOo(][;:=])")
+    # emoticones = re.compile("([:;=][)|vDdPpOo(Ss]+)|([|VvDOo(][;:=])")
+    emoticones = re.compile("(?:>?(?::|;)-?(?:\)|\(|D|p|P|0|\\|O|\|))|(?:(?:x|X)D)")
 
     todos_los_hashtags = []
     todos_los_usuarios = []
@@ -42,9 +43,9 @@ def extract_string(df):
             todas_los_tiempos.extend(hrs.findall(tweet))
         if emoticones.findall(tweet):
             todos_los_emoticones.extend(emoticones.findall(tweet))
-        if emoji.emoji_list(tweet):
-            for objeto in emoji.emoji_list(tweet):
-                todos_los_emojis.append(objeto["emoji"])
+        # if emoji.emoji_list(tweet):
+        #     for objeto in emoji.emoji_list(tweet):
+        #         todos_los_emojis.append(objeto["emoji"])
 
     # cuenta la frecuencia de cada cadena
     conteo_hashtags = Counter(todos_los_hashtags)
