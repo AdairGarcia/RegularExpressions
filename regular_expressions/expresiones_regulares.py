@@ -5,8 +5,7 @@ from collections import Counter
 def extract_string(df):
     hashtags = re.compile("#\w+")
     users = re.compile("@\w+")
-    # urls = re.compile("(https?://)(([a-zA-z]|[0-9]|[?]|#|=|-|&)+[.|/]?)+")
-    urls = re.compile("https?://[a-zA-z0-9./?=&#-]+")
+    urls = re.compile("(https?://(([a-zA-z]|[0-9]|[?]|#|=|-|&)+[.|/]?)+)")
 
     # Formatos de tiempo
     tttttt = re.compile("([0-1]?[0-9]|2[0-4]):([0-5][0-9]|60)(:[0-5][0-9]|60)?")
@@ -45,9 +44,6 @@ def extract_string(df):
             todos_los_emoticones.extend(emoticones.findall(tweet))
         if emojis.findall(tweet):
             todos_los_emojis.extend(emojis.findall(tweet))
-        # if emoji.emoji_list(tweet):
-        #     for objeto in emoji.emoji_list(tweet):
-        #         todos_los_emojis.append(objeto["emoji"])
 
 
     # cuenta la frecuencia de cada cadena
@@ -60,11 +56,28 @@ def extract_string(df):
 
 
     # imprime los 10 cadenas más comunes
+    print("HASHTAGS")
+    print(f'Numero total de matches: {len(todos_los_hashtags)}')
     print(conteo_hashtags.most_common(10))
+
+    print("USUARIOS")
+    print(f'Numero total de matches: {len(todos_los_usuarios)}')
     print(conteo_users.most_common(10))
+
+    print("URLS")
+    print(f'Numero total de matches: {len(todos_los_urls)}')
     print(conteo_urls.most_common(10))
+
+    print("TIEMPOS")
+    print(f'Numero total de matches: {len(todas_los_tiempos)}')
     print(conteo_tiempos.most_common(10))
+
+    print("EMOTICONES")
+    print(f'Numero total de matches: {len(todos_los_emoticones)}')
     print(conteo_emoticones.most_common(10))
+
+    print("EMOJIS")
+    print(f'Numero total de matches: {len(todos_los_emojis)}')
     print(conteo_emojis.most_common(10))
 
 if __name__ == "__main__":
